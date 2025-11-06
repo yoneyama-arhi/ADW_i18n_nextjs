@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // 静的ファイルやAPIをスキップ
+  // 1) 静的ファイルやAPIは対象外
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -14,26 +14,28 @@ export function middleware(req: NextRequest) {
     return
   }
 
-  // Cookieから言語を取得（デフォルトは英語）
+  // 2) Cookie から言語取得（デフォルトは en）
   const locale = req.cookies.get('NEXT_LOCALE')?.value || 'en'
+  const supportedLocales = ['en', 'ja', 'zh'] as const
+  const hasLocalePrefix = supportedLocales.some((loc) =>
+    pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
+  )
 
-  // すでに言語プレフィックス付きなら何もしない
-  if (pathname.startsWith(`/${locale}`)) {
+  // 3) すでにロケール付きなら、そのまま
+  if (hasLocalePrefix) {
+    // `/en` のように末尾スラッシュなしで来たら `/en/home` に寄せる
+    if (supportedLocales.some((loc) => pathname === `/${loc}`)) {
+      return NextResponse.redirect(new URL(`/${locale}/home`, req.url))
+    }
     return
   }
 
-  // "/" の場合のみリダイレクト（無限ループ防止）
+  // 4) ルート `/` は 1 回だけ `/[locale]/home` に
   if (pathname === '/') {
     return NextResponse.redirect(new URL(`/${locale}/home`, req.url))
   }
 
-  // その他のパスでロケールがない場合のみ補完
-  const supportedLocales = ['en', 'ja', 'zh']
-  const hasLocale = supportedLocales.some((loc) => pathname.startsWith(`/${loc}/`))
-  if (!hasLocale) {
-    return NextResponse.redirect(new URL(`/${locale}${pathname}`, req.url))
-  }
-
-  // デフォルトは何もせず続行
-  return
+  // 5) そのほかロケール無しのパスは `/[locale]${pathname}` に補完（重複スラッシュ防止）
+  const safePath = pathname.startsWith('/') ? pathname : `/${pathname}`
+  return NextResponse.redirect(new URL(`/${locale}${safePath}`, req.url))
 }
