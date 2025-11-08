@@ -20,17 +20,14 @@ export default function RootLayout({
   return (
     <html lang={locale}>
       <body>
-        <header>
-          {/* 省略 */}
-          <nav className="flex items-center gap-6 text-sm">
-            <Link href={`/${locale}/collections`} className="no-underline">{t.nav.collections}</Link>
-            <Link href={`/${locale}/about`} className="no-underline">{t.nav.about}</Link>
-            <Link href={`/${locale}/contact`} className="no-underline">{t.nav.contact}</Link>
+      import Header from '@/app/components/Header';
 
-            {/* ← 関数 props を渡さず、置くだけ */}
-            <LanguageSwitcher locale={locale} />
-          </nav>
-        </header>
+...
+
+<body>
+  <Header locale={locale} t={t} />
+  {children}
+</body>
 
         {children}
       </body>
