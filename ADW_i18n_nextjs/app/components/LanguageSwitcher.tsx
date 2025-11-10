@@ -1,39 +1,19 @@
-// app/components/LanguageSwitcher.tsx
-'use client';
+'use client'
+import { useRouter, usePathname } from 'next/navigation'
+const LOCALES = ['en','ja','zh'] as const
+type L = typeof LOCALES[number]
 
-import { useRouter } from 'next/navigation';
-
-type Props = { locale: string };
-
-const ITEMS: Array<[string, string]> = [
-  ['en', 'English'],
-  ['ja', '日本語'],
-  ['zh', '中文'],
-];
-
-export default function LanguageSwitcher({ locale }: Props) {
-  const router = useRouter();
-
-  const setLang = (loc: string) => {
-    // 1年保持の Cookie をセット
-    document.cookie = `NEXT_LOCALE=${loc}; path=/; max-age=${60 * 60 * 24 * 365}`;
-    // 必要な場所へ遷移（/xx/home）
-    router.replace(`/${loc}/home`);
-    router.refresh();
-  };
-
+export default function LanguageSwitcher() {
+  const r = useRouter(); const p = usePathname()
+  const go = (l:L) => {
+    document.cookie = `NEXT_LOCALE=${l}; Path=/; Max-Age=31536000; SameSite=Lax`
+    const seg = p.split('/').filter(Boolean)
+    if (seg[0] && LOCALES.includes(seg[0] as L)) seg[0] = l; else seg.unshift(l)
+    r.push('/' + seg.join('/'))
+  }
   return (
-    <div className="flex items-center gap-2">
-      {ITEMS.map(([loc, label]) => (
-        <button
-          key={loc}
-          type="button"
-          onClick={() => setLang(loc)}
-          className={loc === locale ? 'no-underline opacity-60' : 'no-underline'}
-        >
-          {label}
-        </button>
-      ))}
+    <div className="flex gap-2">
+      {LOCALES.map(l => <button key={l} onClick={()=>go(l)} className="px-2 py-1 border rounded">{l.toUpperCase()}</button>)}
     </div>
-  );
+  )
 }
