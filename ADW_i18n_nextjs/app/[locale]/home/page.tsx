@@ -22,12 +22,12 @@ export default async function Home({
         </div>
 
         {/* 4枚グリッド（自社ホスト画像） */}
-        <div className="grid grid-cols-2 gap-4">
-          <Image src="/images/hero-1.jpg" alt="" width={800} height={800} priority />
-          <Image src="/images/hero-2.jpg" alt="" width={800} height={800} />
-          <Image src="/images/hero-3.jpg" alt="" width={800} height={800} />
-          <Image src="/images/hero-4.jpg" alt="" width={800} height={800} />
-        </div>
+<div className="grid grid-cols-2 gap-4">
+  <img src="/images/hero-1.jpg" alt="" width={800} height={800} className="rounded-xl w-full h-auto" />
+  <img src="/images/hero-2.jpg" alt="" width={800} height={800} className="rounded-xl w-full h-auto" />
+  <img src="/images/hero-3.jpg" alt="" width={800} height={800} className="rounded-xl w-full h-auto" />
+  <img src="/images/hero-4.jpg" alt="" width={800} height={800} className="rounded-xl w-full h-auto" />
+</div>
       </section>
 
       {/* Featured（仮） */}
