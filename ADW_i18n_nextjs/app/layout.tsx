@@ -1,14 +1,12 @@
 import './globals.css';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-});
+const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'ADW | Luxury Faux Florals & Botanicals',
-  description: 'Inspired by natural beauty — ADW Luxury Faux Florals & Botanicals.',
+export const metadata: Metadata = {
+  title: 'ADW — Modern Luxury Faux Florals',
+  description: 'Museum-grade faux arrangements for fashion-forward interiors.',
 };
 
 export default function RootLayout({
@@ -17,20 +15,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="bg-white text-zinc-900">{children}</body>
+    <html lang="en">
+      <head>
+        {/* ▼ ファビコンを明示指定（ここを追加） */}
+        <link rel="icon" href="/favicon.ico" />
+        {/* ▼ メタデータの指定（必要に応じて） */}
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body className={`${inter.className} bg-white text-zinc-900`}>
+        {children}
+      </body>
     </html>
   );
-}
-/* ==== Apple SF Pro Font (optional local use) ==== */
-@font-face {
-  font-family: 'SF Pro Display';
-  src: url('/fonts/SF-Pro-Display-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* フォント適用（Appleシステムフォントと併用） */
-body {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 }
