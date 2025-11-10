@@ -22,3 +22,15 @@ export default function RootLayout({
     </html>
   );
 }
+/* ==== Apple SF Pro Font (optional local use) ==== */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SF-Pro-Display-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* フォント適用（Appleシステムフォントと併用） */
+body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
