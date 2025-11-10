@@ -1,18 +1,15 @@
 import Image from 'next/image'
+import { getDictionary } from '@/lib/dictionary'
 
-export default function About() {
+export default async function About({ params:{ locale } }:{ params:{locale:'en'|'ja'|'zh'} }) {
+  const t = await getDictionary(locale)
   return (
-    <main className="container-narrow py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <div>
-          <h1 className="text-3xl font-semibold mb-4">About ADW</h1>
-          <p className="text-gray-600 leading-7">
-            ADW crafts museum-grade faux florals with a fashion-forward sensibility.
-            Every arrangement is designed to elevate interiors with lasting beauty.
-          </p>
-        </div>
-        <Image src="/placeholder.jpg" alt="" width={800} height={800} className="rounded-2xl object-cover aspect-square" />
+    <main className="p-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+      <div>
+        <h1 className="text-3xl font-bold mb-4">{t['about.title']}</h1>
+        <p className="text-gray-600">{t['about.body']}</p>
       </div>
+      <Image src="https://www.ndi.com/path/to/about.jpg" alt="" width={1000} height={700}/>
     </main>
   )
 }
